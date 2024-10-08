@@ -1,0 +1,4 @@
+coverage==7.2.3
+unittest-parallel==1.5.3
+pandas>=2.0.0
+pdoc3==0.11.1

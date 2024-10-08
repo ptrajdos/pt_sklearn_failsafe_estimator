@@ -1,0 +1,1 @@
+# Failsafe Estimator for sklearn
