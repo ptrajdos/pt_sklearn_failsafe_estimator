@@ -1,7 +1,6 @@
 from sklearn.base import BaseEstimator, ClassifierMixin, clone, check_is_fitted
 from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
 import logging
 
 class FailsafeEstimator(BaseEstimator, ClassifierMixin):
@@ -32,7 +31,7 @@ class FailsafeEstimator(BaseEstimator, ClassifierMixin):
                 #TODO what if it should fail?
                 base_estimator_.fit(X, y)
             except exc_to_catch as e:
-                logging.warning("Failsafe Estimator -- falling back to default estimator!")
+                logging.warning("Failsafe Estimator -- falling back to default estimator!", exc_info=True)
                 base_estimator_ = clone(self.default_estimator) if self.default_estimator is not None\
                     else DummyClassifier()
                 
