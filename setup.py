@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='pt_sklearn_failsafe_estimator',
-        version ='0.0.1',
+        version ='0.0.2',
         author='Pawel Trajdos',
         author_email='pawel.trajdos@pwr.edu.pl',
         url = 'https://github.com/ptrajdos/pt_sklearn_failsafe_estimator',

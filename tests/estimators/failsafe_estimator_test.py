@@ -12,6 +12,12 @@ from sklearn.base import BaseEstimator, ClassifierMixin, clone
 
 from pt_sklearn_failsafe_estimator.estimators.failsafe_estimator import FailsafeEstimator
 
+def failing_use_default_model(exception):
+    return False
+
+def failing_set_validation(X,y):
+    raise ValueError("Failing!")
+
 class FailingEstimator(BaseEstimator, ClassifierMixin):
 
     def __init__(self) -> None:
@@ -51,6 +57,8 @@ class FailsafeEstimatorTest(unittest.TestCase):
             vf.under_test = False
             vf.base_estimator = FailingEstimator()
             estims_new[f"{k}_f"] = vf
+
+            #TODO add with failing set!
 
 
         estims.update(estims_new)
@@ -111,3 +119,38 @@ class FailsafeEstimatorTest(unittest.TestCase):
             self.assertIsInstance(pred, np.ndarray, f"Wrong type of transformed object for {clf_name}")
             self.assertTrue(len(pred) == len(y), f"Wrong length of the transformed object for {clf_name}")
             self.assertTrue( np.allclose(np.unique(pred), np.unique(y)), f"Different set of predicted classes for {clf_name}"  )
+    
+    def test_should_fail_no_default_model(self):
+
+        X,y = load_iris(return_X_y=True)
+
+        failsafe_estim = FailsafeEstimator(
+            base_estimator=FailingEstimator(),
+            use_default_model_function=failing_use_default_model,
+              under_test=False,
+        )
+        
+
+        try:
+            failsafe_estim.fit(X,y)
+            self.fail("Function should have indicated that the default model should have been used.")
+        except Exception as e:
+            self.assertTrue(True)
+
+    def test_should_fail_on_set_validation(self):
+
+        X,y = load_iris(return_X_y=True)
+
+        failsafe_estim = FailsafeEstimator(
+              under_test=False,
+              set_validation_function=failing_set_validation,
+        )
+        
+        try:
+            failsafe_estim.fit(X,y)
+            self.fail("Should have been failed during set validation.")
+        except Exception as e:
+            self.assertTrue(True)
+
+
+        
