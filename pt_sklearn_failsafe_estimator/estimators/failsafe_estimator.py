@@ -31,7 +31,7 @@ def default_set_validation(X, y):
     pass
 
 
-class FailsafeEstimator(BaseEstimator, ClassifierMixin):
+class FailsafeEstimator(ClassifierMixin, BaseEstimator):
     """
     Class that prevents the model from failing during training phase.
 
