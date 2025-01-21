@@ -37,6 +37,7 @@ class FailsafeEstimatorTest(unittest.TestCase):
     
     def test_sklearn(self):
 
+        #TODO check_estimator(generate_only=True) will be removed in sklearn 1.8
         for clf_name, clf in self.get_estimators().items():
             for estimator, check in check_estimator(clf, generate_only=True):
                 check(estimator)

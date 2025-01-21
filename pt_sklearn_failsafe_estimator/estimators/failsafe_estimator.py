@@ -3,7 +3,6 @@ from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
 import logging
 
-
 def default_exception_check(exception):
     """
     Arguments:
@@ -89,7 +88,7 @@ class FailsafeEstimator(ClassifierMixin, BaseEstimator):
             if self.set_validation_function is None
             else self.set_validation_function
         )
-        default_set_validation(X,y)
+        default_set_validation(X, y)
 
     def fit(self, X, y):
         base_estimator_ = (
@@ -106,8 +105,7 @@ class FailsafeEstimator(ClassifierMixin, BaseEstimator):
 
         if not self.under_test:
             try:
-                # TODO what if it should fail?
-                self._validate_set(X,y)
+                self._validate_set(X, y)
                 base_estimator_.fit(X, y)
             except exc_to_catch as e:
                 if self._use_default_model(e):
@@ -136,6 +134,10 @@ class FailsafeEstimator(ClassifierMixin, BaseEstimator):
     def predict(self, X):
         check_is_fitted(self, ("base_estimator_"))
         return self.base_estimator_.predict(X)
+    
+    #FIXME It would be needed in sklearn 1.6 
+    # def decision_function(self,X):
+    #     pass
 
     def __getattr__(self, name):
         """
@@ -149,3 +151,15 @@ class FailsafeEstimator(ClassifierMixin, BaseEstimator):
             return getattr(self.base_estimator, name)
         else:
             return getattr(FailsafeEstimator._get_default_model(), name)
+
+    #TODO for future use in sklearn 1.6
+    def __sklearn_tags__(self):
+        has_attr = "base_estimator_" in self.__dict__
+
+        if has_attr:
+            return self.base_estimator_.__sklearn_tags__()
+        
+        if self.base_estimator is not None:
+            return self.base_estimator.__sklearn_tags__()
+        
+        return FailsafeEstimator._get_default_model().__sklearn_tags__()

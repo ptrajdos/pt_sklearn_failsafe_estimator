@@ -12,7 +12,7 @@ setup(
                 'pt_sklearn_failsafe_estimator.*',
                 ]),
         install_requires=[ 
-                'scikit-learn>=1.2.2',
+                'scikit-learn>=1.2.2, <1.6.0',
         ],
         test_suite='test'
         )
