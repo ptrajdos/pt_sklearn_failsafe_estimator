@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='pt_sklearn_failsafe_estimator',
-        version ='0.0.2',
+        version ='0.0.3',
         author='Pawel Trajdos',
         author_email='pawel.trajdos@pwr.edu.pl',
         url = 'https://github.com/ptrajdos/pt_sklearn_failsafe_estimator',
@@ -12,7 +12,7 @@ setup(
                 'pt_sklearn_failsafe_estimator.*',
                 ]),
         install_requires=[ 
-                'scikit-learn>=1.2.2, <1.6.0',
+                'scikit-learn>=1.2.2, <1.7.0',
         ],
         test_suite='test'
         )
