@@ -16,6 +16,7 @@ UNITTEST_PARALLEL = unittest-parallel
 PDOC= pdoc3
 PYTHON=python
 PIP=pip
+PYTEST=pytest
 
 LOGDIR=${ROOTDIR}/testlogs
 LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
@@ -30,10 +31,13 @@ endif
 .PHONY: all clean test docs
 
 all: venv
+clean: clean_venv
 
 venv:
 	${PYTHON} -m venv ${VENV_SUBDIR}
-	${ACTIVATE}; ${PIP} install -e ${ROOTDIR} --prefer-binary --log ${INSTALL_LOG_FILE}; ${PIP} install --prefer-binary -r ${REQ_FILE};
+	${ACTIVATE}; ${PYTHON} -m ${PIP} install pip -U
+	${ACTIVATE}; ${PIP} install -e ${ROOTDIR} --prefer-binary --log ${INSTALL_LOG_FILE} -r ${REQ_FILE}
+
 
 test: venv
 	mkdir -p ${LOGDIR}  
@@ -50,3 +54,7 @@ docs:
 
 clean_venv:
 	rm -rf ${VENV_SUBDIR}
+
+profile: venv
+	
+	${ACTIVATE}; ${PYTEST} -n auto --cov-report=html --cov=${SRCDIR} --profile ${TESTDIR}

@@ -163,6 +163,7 @@ cython_debug/
 *.tar.xz
 #Macos
 .DS_Store
-*venv
+*venv*
 *cvenv
 docs
+prof
